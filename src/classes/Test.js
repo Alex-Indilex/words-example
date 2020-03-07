@@ -1,5 +1,6 @@
 import Service from "./Service";
 import { Task } from "./Task";
+import shuffle from "lodash/shuffle";
 
 export default class Test {
     constructor() {
@@ -9,8 +10,24 @@ export default class Test {
         this._current = -1;
     }
 
-    _createTasks() {
-        this._tasks = data.map(Task.create);
+    _createTasks(data) {
+        this._tasks = shuffle(data).map(Task.create);
+        this._tasks.forEach(task => {
+            const checkFn = task.checkAnswer;
+            const self = this;
+            task.checkAnswer = function(answer) {
+                let result = checkFn.call(task, answer);
+                if (result) {
+                    // нет ошибки
+                } else {
+                    // есть ошибка
+                }
+                if (task.isComleted) {
+                    self._current++;
+                }
+                return result;
+            }
+        });
         this._current = 0;
     }
 
@@ -19,6 +36,12 @@ export default class Test {
             return this._tasks[this._current];
         }
         return null;
+    }
+
+    passAnswer(answer) {
+        if (this.task.checkAnswer(answer)) {
+
+        }
     }
 }
 
