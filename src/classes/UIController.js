@@ -1,11 +1,7 @@
 export default class UIController {
     constructor() {
         this._setOnloadHandler();
-
-
     }
-
-
     /**
      * Для обмена сообщениями необходимо передать экземпляр теста
      *
@@ -22,17 +18,37 @@ export default class UIController {
      * @param {string} type тип сообщения, который описывает, что произошло
      * @param {any} payload полезная нагрузка, т.е. любые данные, необходимые UI
      */
-
     sendMessage(type, payload= null) {
-        console.log(type, payload);
+       const handler = `_${type}`;
+       if (typeof this[handler] === "function") {
+           this[handler]();
+       } else {
+           console.warn(`There is no handlers for ${type} message.`);
+       }
     }
-
 
     _setOnloadHandler() {
         window.addEventListener("load",() => {
             if (this._test.ready) {
                 this._test.start();
             }
+            this._onloaded = true;
         });
     }
+
+    ["_test:ready"]() {
+        if (this._onloaded) {
+            this._test.start();
+        }
+    }
+
+    ["_task:changed"]() {
+        const { task } = this._test; // деструктуризация
+
+        document.write(task.getDescription() + "<br>");
+        document.write(task.question);
+
+        task.checkAnswer("I");
+    }
+
 }
