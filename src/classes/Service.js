@@ -1,5 +1,5 @@
 export default class Service {
-    constructor(appIrl) {
+    constructor(apiUrl) {
         this._url = apiUrl;
         this._storageKey = 'TEST_STATE'
     }

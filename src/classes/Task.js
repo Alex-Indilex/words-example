@@ -47,9 +47,6 @@ export class Task {
 
 Task._subclasses = {};
 
-
-
-
 export class WordTask extends Task{
     constructor({question, answer}) {
         super();
@@ -76,7 +73,6 @@ export class WordTask extends Task{
     }
 
 }
-
 
 export class PhraseTask extends Task{
     constructor({ question }) {
